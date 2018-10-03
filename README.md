@@ -54,7 +54,7 @@
 
    ```
 
-4. 新建一个文件，自己创建一个提交：先查看一下状态 `git status`
+4. 新建一个文件，自己创建一个提交：但先查看一下状态 `git status`
 
    ```bash
    $ git status
@@ -72,5 +72,92 @@
    -- 有一个未追踪的文件 “README.md” ,可以使用 git add 追踪文件（提交）
    ```
 
-5. 提交文件： `git add`
+5. 追踪文件： `git add README.md`，再次 `git status`
+
+   ```bash
+   $ git status
+   On branch master
+   Your branch is up to date with 'origin/master'.
+
+   Changes to be committed:
+     (use "git reset HEAD <file>..." to unstage)
+
+           new file:   README.md
+
+   -- 当前分支是最新的，已暂存一个新文件：README.md，该文件由“未追踪”变成了“已暂存”，表明这个文件被改动的部分已进入“暂存区”
+   ```
+
+6. 提交文件：`git commit` 。可以在后面以双引号包裹要添加提交的描述信息，如果不填将进入 vim 填写后保存退出即可。
+
+   ```bash
+   $ git commit
+
+   *** Please tell me who you are.
+
+   Run
+
+     git config --global user.email "you@example.com"
+     git config --global user.name "Your Name"
+
+   to set your account's default identity.
+   Omit --global to set the identity only in this repository.
+
+   fatal: unable to auto-detect email address (got 'Administrator@YU-ZH.(none)')
+
+   -- 首次提交需要指明身份（额外一点：github的贡献值是以邮箱地址作为提交的记录标识，如果 setting 里面没有添加该邮箱，那么贡献值会不存在。）
+
+   Administrator@YU-ZH MINGW64 /d/IdeaProjects/git-practical-guide (master)
+   $ git config --global user.email "yuzh233@gmail.com"
+
+   Administrator@YU-ZH MINGW64 /d/IdeaProjects/git-practical-guide (master)
+   $ git config --global user.name "yu.zh"
+
+   Administrator@YU-ZH MINGW64 /d/IdeaProjects/git-practical-guide (master)
+   $ git commit
+   [master 967f40b] add README.md
+    1 file changed, 76 insertions(+)
+    create mode 100644 README.md
+
+   ```
+
+7. 再查看一次日志吧：`git log`
+
+   ```bash
+   $ git log
+   commit 967f40b3fd29f102fc84f62ac9d20243db2a99b4 (HEAD -> master)
+   Author: yu.zh <yuzh233@gmail.com>
+   Date:   Wed Oct 3 21:50:03 2018 +0800
+
+       add README.md
+
+   commit 0a00230727018a14d481fe482e8e85f7b312e39c (origin/master, origin/HEAD)
+   Author: yu_zh <yuzh233@163.com>
+   Date:   Wed Oct 3 00:23:27 2018 +0800
+
+       Initial commit
+
+   -- 可以看到，一共有两次提交记录，最近的一次提交在最前面。
+   ```
+
+8. 当我们的文件有修改时，需要更新到本地仓库。先看一下状态是个好习惯： `git status`
+
+   ```bash
+   $ git status
+   On branch master
+   Your branch is ahead of 'origin/master' by 1 commit.
+     (use "git push" to publish your local commits)
+
+   Changes not staged for commit:
+     (use "git add <file>..." to update what will be committed)
+     (use "git checkout -- <file>..." to discard changes in working directory)
+
+           modified:   README.md
+
+   no changes added to commit (use "git add" and/or "git commit -a")
+
+   -- 当前位于主分支，当前分支“领先于”远程仓库主分支一个提交
+   -- 未提交的一个更改 README.md ，git 认识这个文件，但它不是一个新文件了，我们把它同步为最新的。
+   ```
+
+9. 依然是： `git add README.md`
 
