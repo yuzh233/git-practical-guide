@@ -87,7 +87,7 @@
    -- 当前分支是最新的，已暂存一个新文件：README.md，该文件由“未追踪”变成了“已暂存”，表明这个文件被改动的部分已进入“暂存区”
    ```
 
-6. 提交文件：`git commit` 。可以在后面以双引号包裹要添加提交的描述信息，如果不填将进入 vim 填写后保存退出即可。
+6. 提交文件：`git commit` 。进入 vim 填写提交的描述信息保存退出即可。
 
    ```bash
    $ git commit
@@ -161,3 +161,46 @@
 
 9. 依然是： `git add README.md`
 
+10. 查看状态： `git status`
+
+    ```bash
+    $ git status
+    On branch master
+    Your branch is ahead of 'origin/master' by 1 commit.
+      (use "git push" to publish your local commits)
+
+    Changes to be committed:
+      (use "git reset HEAD <file>..." to unstage)
+
+            modified:   README.md
+
+    -- 一个文件被改动了
+    ```
+
+11. 提交： `git commit`
+
+12. 此时查看下日志：`git log`
+
+    ```bash
+    $ git log
+    commit 7ba78ab8cef21de0174884ef13fb6210f9552fe3 (HEAD -> master)
+    Author: yu.zh <yuzh233@gmail.com>
+    Date:   Wed Oct 3 22:10:13 2018 +0800
+
+        update README.md
+
+    commit 967f40b3fd29f102fc84f62ac9d20243db2a99b4
+    Author: yu.zh <yuzh233@gmail.com>
+    Date:   Wed Oct 3 21:50:03 2018 +0800
+
+        add README.md
+
+    commit 0a00230727018a14d481fe482e8e85f7b312e39c (origin/master, origin/HEAD)
+    Author: yu_zh <yuzh233@163.com>
+    Date:   Wed Oct 3 00:23:27 2018 +0800
+
+        Initial commit
+
+    ```
+
+    ​
