@@ -306,5 +306,13 @@ HEAD 除了可以指向 commit，还可以指向一个 **branch**，当它指向
 我们在 feature1 分支中创建一个提交：添加 feature1.txt。此时 HEAD
 指向了 feature1，feature1 指向当前提交。
 
+又切换回 master 分支：`git checkout master`，在 master 创建一个提交：添加 master.txt，此时出现了分叉（两个分支有不同的提交）。
 
-又切换回 master 分支：`git checkout master`，在 master 创建一个提交：添加 master.txt，此时
+删除刚刚创建的分支：`git branch -d feature1`
+
+- HEAD 指向的 branch 不能删除。如果要删除 HEAD 指向的 branch，需要先用 checkout 把 HEAD 指向其他地方。
+
+- branch 只是一个引用，删除引用并不会删除该引用路径上的所有 commit 集合（不过一个 commit 不在任何一个 branch 路径上，就是个野生 commit 了，会被 git 垃圾回收掉）
+
+- 没有被合并到 master 过的 branch 在删除时会失败。强制删除将 `-d` 改为 `-D`
+
