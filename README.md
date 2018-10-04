@@ -58,7 +58,7 @@
 
 2. 在指定路径克隆该远程仓库到本地： `git clone https://github.com/yuzh233/git-practical-guide.git`
 
-3. 查看日志： `git log` 
+3. 查看日志： `git log` ，若日志信息太长，按 q 退出。
 
    ```bash
    $ git log
@@ -252,7 +252,7 @@
 1. 先确保已经在 git 中保存了全局用户名和邮箱
 
     git config --global user.name "yourname"
-    
+
     git config --global user.email“your@email.com"
 
 2. 删除 C:\Users\Administrator\.ssh\known_hosts 文件
@@ -295,6 +295,10 @@ HEAD 除了可以指向 commit，还可以指向一个 **branch**，当它指向
 
 **master** 是一个特殊的 branch ,是git默认的分支（主分支）。新创建一个 repository 的第一个 commit 时，会把 master 指向它，并把 HEAD 指向 master。
 
+- 新建的仓库中的第一个 commit 会被 master 自动指向
+
+- 在 git clone 时，会自动 checkout 出 master
+
 ## branch xx / checkout branch xx / checkout -d xx / branch -d xx 
 
 创建一个分支：`git branch feature1`
@@ -315,4 +319,5 @@ HEAD 除了可以指向 commit，还可以指向一个 **branch**，当它指向
 - branch 只是一个引用，删除引用并不会删除该引用路径上的所有 commit 集合（不过一个 commit 不在任何一个 branch 路径上，就是个野生 commit 了，会被 git 垃圾回收掉）
 
 - 没有被合并到 master 过的 branch 在删除时会失败。强制删除将 `-d` 改为 `-D`
+
 
