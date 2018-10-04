@@ -14,6 +14,7 @@
     - [关联 GitHub 与本机的 SSH Key](#关联-github-与本机的-ssh-key)
     - [git pull](#git-pull)
     - [HEAD / master / branch 理解](#head--master--branch-理解)
+    - [branch xx / checkout branch xx / checkout -d xx / branch -d xx](#branch-xx--checkout-branch-xx--checkout--d-xx--branch--d-xx)
 
 <!-- /TOC -->
 
@@ -272,12 +273,38 @@ pull 指令用于从中央仓库更新代码到本地仓库。当多人协作开
 
 指向 commit 的快捷方式：**引用**
 
-![git log](img/image_1.png)
+![git log](git_img/image_1.png)
 
-括号里的 `HEAD -> master, origin/master, origin/HEAD` ，都是指向这个 commit 的引用。commit 后面一大串的字符是当前提交的唯一标识符（SHA-1 校验和），提供引用机制是为了简化标识符,方便记忆。
+括号里的 `HEAD -> master, origin/master, origin/HEAD` ，都是指向这个 commit 的引用。commit 后面一大串的字符是当前提交的唯一标识符（SHA-1 校验和），提供引用机制是为了简化标识符，方便记忆。
 
 **HEAD** 指向当前最新的 commit ，当前 commit 在哪里，HEAD 就在哪里，这是一个永远指向当前 commit 的引用。
 
 HEAD 除了可以指向 commit，还可以指向一个 **branch**，当它指向某个 branch 的时候，会通过这个 branch 来间接地指向某个 commit；另外，当 HEAD 在提交时自动向前移动的时候，它会像一个拖钩一样带着它所指向的 branch 一起移动。
 
 我们创建一个 commit 之后查看 log：
+
+![](git_img/image_2.png)
+
+最新的 commit 被创建后，HEAD 和 master 这两个引用都指向了它，而在上面第一张图中的后两个引用 origin/master 和 origin/HEAD 则依然停留在原先的位置。
+
+**branch** 可以理解为从初始 commit 到 branch 所指向的 commit 之间的所有 commit 集合的一个串。
+
+- 所有的 branch 之间都是平等的
+
+- branch 包含了从初始 commit 到它的所有路径，而不是一条路径。并且，这些路径之间也是彼此平等的。
+
+**master** 是一个特殊的 branch ,是git默认的分支（主分支）。新创建一个 repository 的第一个 commit 时，会把 master 指向它，并把 HEAD 指向 master。
+
+## branch xx / checkout branch xx / checkout -d xx / branch -d xx 
+
+创建一个分支：`git branch feature1`
+
+切换到这个分支：`git checkout feature1`，此时 HEAD 指向了 feature1 这和分支了。
+
+    创建一个分支并切换过去：git checkout -b feature1
+
+我们在 feature1 分支中创建一个提交：添加 feature1.txt。此时 HEAD
+指向了 feature1，feature1 指向当前提交。
+
+
+又切换回 master 分支：`git checkout master`，在 master 创建一个提交：添加 master.txt，此时
