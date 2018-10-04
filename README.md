@@ -15,6 +15,7 @@
     - [git pull](#git-pull)
     - [HEAD / master / branch 理解](#head--master--branch-理解)
     - [branch xx / checkout branch xx / checkout -d xx / branch -d xx](#branch-xx--checkout-branch-xx--checkout--d-xx--branch--d-xx)
+    - [push 的本质](#push-的本质)
 
 <!-- /TOC -->
 
@@ -320,4 +321,9 @@ HEAD 除了可以指向 commit，还可以指向一个 **branch**，当它指向
 
 - 没有被合并到 master 过的 branch 在删除时会失败。强制删除将 `-d` 改为 `-D`
 
+## push 的本质
+push 是把当前的分支上传到远程仓库，并把这个 branch 的路径上的所有 commits 也一并上传。
 
+push 的时候，如果当前分支是一个本地创建的分支，需要指定远程仓库名和分支名，用 `git push origin 分支名` 的格式，而不能只用 git push；或者可以通过 `git config` 修改 push.default 来改变 push 时的行为逻辑。
+
+push 之后上传当前分支，并不会上传 HEAD；远程仓库的 HEAD 是永远指向默认分支（即 master）的。
