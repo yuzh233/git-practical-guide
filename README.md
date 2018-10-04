@@ -13,6 +13,7 @@
     - [本地初始化仓库并推送到 GitHub](#本地初始化仓库并推送到-github)
     - [关联 GitHub 与本机的 SSH Key](#关联-github-与本机的-ssh-key)
     - [git pull](#git-pull)
+    - [HEAD / master / branch 理解](#head--master--branch-理解)
 
 <!-- /TOC -->
 
@@ -88,7 +89,7 @@
    -- 有一个未追踪的文件 “README.md” ,可以使用 git add 追踪文件（提交）
    ```
 
-5. 追踪文件： `git add README.md`，再次 `git status`。 添加全部文件到暂存区：`git add .`
+5. 追踪文件： `git add README.md`，再次 `git status`。 添加全部文件到暂存区：`git add . / git add -A`
 
    ```bash
    $ git status
@@ -244,7 +245,7 @@
 
 4. 关联远程库: `git remote add origin git@github.com:yuzh233/demo.git ` or `git remote add origin https://github.com/yuzh233/demo.git`
 
-5. 推送到远程库：`git push -u origin master` 
+5. 推送到远程库：`git push -u origin master` ，需要先关联 GitHub 与本机的 SSH Key.
 
 ## 关联 GitHub 与本机的 SSH Key 
 1. 先确保已经在 git 中保存了全局用户名和邮箱
@@ -267,3 +268,16 @@ pull 指令用于从中央仓库更新代码到本地仓库。当多人协作开
 
 一种场景：同事A　commit了一条记录并 push 到远程仓库。同事B 也在自己的本地仓库中 commit 了一条记录后试图 push。此时 git 会发现远程仓库含有本地未有的提交 push 失败。于是同事B 执行 `git pull` ，**此时的 pull 并不会和往常一样结束，而是会进入一个 vim 的信息提示界面，需要输入提交信息（git默认填写了信息），原因是git不仅发现远程仓库含有本地仓库没有的提交，本地仓库也含有远程仓库没有的提交，git会将远程仓库的 commit 和本地仓库的 commit 合并（git mage）产生一条新的提交并添加默认描述信息。** 退出保存信息提示界面之后，pull就完成了，然后执行 push，此时本地仓库含有远程仓库所有的提交不会失败。
 
+## HEAD / master / branch 理解
+
+指向 commit 的快捷方式：**引用**
+
+![git log](img/image_1.png)
+
+括号里的 `HEAD -> master, origin/master, origin/HEAD` ，都是指向这个 commit 的引用。commit 后面一大串的字符是当前提交的唯一标识符（SHA-1 校验和），提供引用机制是为了简化标识符,方便记忆。
+
+**HEAD** 指向当前最新的 commit ，当前 commit 在哪里，HEAD 就在哪里，这是一个永远指向当前 commit 的引用。
+
+HEAD 除了可以指向 commit，还可以指向一个 **branch**，当它指向某个 branch 的时候，会通过这个 branch 来间接地指向某个 commit；另外，当 HEAD 在提交时自动向前移动的时候，它会像一个拖钩一样带着它所指向的 branch 一起移动。
+
+我们创建一个 commit 之后查看 log：
