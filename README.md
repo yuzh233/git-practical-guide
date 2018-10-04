@@ -425,9 +425,29 @@ git commit -m "没买女装"
 
 我们要保留主分支的更改，即：“购买女装”，只要删除掉 feature1 的修改，再把 Git 添加的那三行 `<<< === >>>` 辅助文字也删掉，保存文件退出，冲突就解决了。
 
-**第一步：手动提交**，提交解决冲突之后的文件：
+**第二步：手动提交**，提交解决冲突之后的文件：
 
+```bash
+git add shopping-list.txt # 这里 commit 前也需要先 add 一下
+git commit
+```
 
+如果要放弃这次 merge ，可以执行：
+
+```bash
+git merge --abort
+```
 
 ### HEAD 领先于目标 commit
+如果 merge 时的目标 commit 和 HEAD 处的 commit 并不存在分叉，而是 HEAD 领先于目标 commit。
+
+![](git_img/15fddc2b2357b9d9.jpg)
+
+那么 merge 就没必要再创建一个新的 commit 来进行合并操作，因为并没有什么需要合并的。在这种情况下， Git 什么也不会做，merge 是一个空操作。
+
 ### HEAD 落后于目标 commit
+如果 HEAD 和目标 commit 不存在分叉，但 HEAD 落后于目标 commit。那么 Git 会直接把 HEAD（以及它所指向的 branch，如果有的话）移动到目标 commit。这也叫做：“fast-forward”。
+
+![](git_img/15fddc2b0913daf4.jpg)
+
+fast-forward 这种场景在 pull 中经常遇到：本地的 master 没有新提交，而远端仓库中有同事提交了新内容到 master，此时的 HEAD 落后于目标 commit（远程的 HEAD），而造成 "fast-forward".
