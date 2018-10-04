@@ -17,6 +17,9 @@
     - [branch xx / checkout branch xx / checkout -d xx / branch -d xx](#branch-xx--checkout-branch-xx--checkout--d-xx--branch--d-xx)
     - [push 的本质](#push-的本质)
     - [git merge <被合并分支>](#git-merge-被合并分支)
+        - [冲突（conflict）](#冲突conflict)
+        - [HEAD 领先于目标 commit](#head-领先于目标-commit)
+        - [HEAD 落后于目标 commit](#head-落后于目标-commit)
 
 <!-- /TOC -->
 
@@ -336,4 +339,75 @@ push 之后上传当前分支，并不会上传 HEAD；远程仓库的 HEAD 是�
 
 HEAD 指向 master，说明当前在主分支，执行 `git merge branch1`之后 git 会 在 commit 2 （交叉位置），将commit 5 和commit 6 合并到 commit 4，然后生成一个新的提交。
 
-演示：
+    首先创建一个分支 branch1，开始并行开发：
+        git branch branch1
+    -------------------------------------
+    在 master 分支创建两个文件：
+        touch a.txt
+        touch b.txt
+        
+    添加并提交这两个文件：
+        git add a.txt b.txt
+        git commit -m "add a.txt b.txt"
+    
+    此时 master 分支有这两个文件
+    -------------------------------------
+    切换到 branch1 分支：
+        git chekout branch1
+    
+    创建一个文件 c.txt 添加并提交：
+        touch c.txt
+        git add c.txt
+        git commit -m "add c.txt"
+
+    此时 branch1 分支含有 c.txt 这个文件
+    --------------------------------------
+    master 有自己的新提交：“a.txt / b.txt”，branch1有自己的新提交：“c.txt”，此时想将 branch1 的提交合并到 master 主分支上：
+    
+        git checkout master 先切换到主分支
+        git merge branch1
+
+    于是 master 就含有 a.txt / b.txt / c.txt 这三个文件了。
+
+### 冲突（conflict）
+> merge 在做合并的时候，是有一定的自动合并能力的：如果一个分支改了 A 文件，另一个分支改了 B 文件，那么合并后就是既改 A 也改 B，这个动作会自动完成；如果两个分支都改了同一个文件，但一个改的是第 1 行，另一个改的是第 2 行，那么合并后就是第 1 行和第 2 行都改，也是自动完成。<br>
+但如果两个分支修改了同一部分内容，merge 的自动算法就搞不定了。这种情况 Git 称之为：冲突（Conflict）。
+
+例如：git仓库中有一个文件 `shopping-list.txt`，内容如下：
+
+    移动硬盘
+    女装
+
+我们用两个分支分别修改文件的同一个地方，先创建一个分支 feature1：
+
+```bash
+git branch feature1
+```
+
+在 master 中修改内容并提交：
+
+```bash
+    移动硬盘
+    女装（已买）
+
+git add shopping-list.txt
+git commit -m "购买女装"
+```
+
+切换到 feature1 修改并提交：
+
+```bash
+    移动硬盘
+    女装（没买）
+
+git add shopping-list.txt
+git commit -m "没买女装"
+```
+
+此时切换回 master ，执行 `git merge feature1`，git 傻了
+
+
+
+
+### HEAD 领先于目标 commit
+### HEAD 落后于目标 commit
