@@ -160,6 +160,7 @@
        Initial commit
 
    -- 可以看到，一共有两次提交记录，最近的一次提交在最前面。
+   -- origin/master, origin/HEAD 是对远端仓库的 master 和 HEAD 的本地镜像。
    ```
 
 8. 当我们的文件有修改时，需要更新到本地仓库。先看一下状态是个好习惯： `git status`
@@ -450,4 +451,4 @@ git merge --abort
 
 ![](git_img/15fddc2b0913daf4.jpg)
 
-fast-forward 这种场景在 pull 中经常遇到：本地的 master 没有新提交，而远端仓库中有同事提交了新内容到 master，此时的 HEAD 落后于目标 commit（远程的 HEAD），而造成 "fast-forward".
+fast-forward 这种场景在 pull 中经常遇到：本地的 master 没有新提交，而远端仓库中有同事提交了新内容到 master，此时的 HEAD 落后于目标 commit（远程的 HEAD），而造成 "fast-forward"。
