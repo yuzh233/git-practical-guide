@@ -397,6 +397,8 @@ git commit -m "购买女装"
 切换到 feature1 修改并提交：
 
 ```bash
+git checkout feature1
+
     移动硬盘
     女装（没买）
 
