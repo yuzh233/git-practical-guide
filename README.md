@@ -20,6 +20,9 @@
         - [冲突（conflict）](#冲突conflict)
         - [HEAD 领先于目标 commit](#head-领先于目标-commit)
         - [HEAD 落后于目标 commit](#head-落后于目标-commit)
+    - [Feature Branching 工作流](#feature-branching-工作流)
+        - [代码分享](#代码分享)
+        - [一人多任务](#一人多任务)
 
 <!-- /TOC -->
 
@@ -452,3 +455,43 @@ git merge --abort
 ![](git_img/15fddc2b0913daf4.jpg)
 
 fast-forward 这种场景在 pull 中经常遇到：本地的 master 没有新提交，而远端仓库中有同事提交了新内容到 master，此时的 HEAD 落后于目标 commit（远程的 HEAD），而造成 "fast-forward"。
+
+## Feature Branching 工作流
+> 之前的工作模型是：所有人都在 master 分支上工作，commit 了代码通过 push 推送到远程仓库，获取别人的 commit 通过 pull。这种模型的局限性在于：每一个人的代码在被大家看到的时候，是它正式进入生产环境的时候。**所有人的代码都直接 push 到远程的 master，这就导致了每个人的代码在正式启用（投入生产环境）前无法被别人看到。** 这样就让代码在正式启用前的讨论和审阅极不方便。
+
+feature branching 工作流解决了这种问题，该工作流的核心特点如下：
+
+- 任何一个新功能（feature）和 bug 的修复都用一个新的 branch 来写；
+
+- branch 写完之后，合并到 master，再删除这个 branch。
+
+这种工作流为团队协作间的 **代码分享 / 一人多任务** 提供解决方案。
+
+### 代码分享
+假如要开发一个新的功能，我们创建一个分支 books ，开始开发：
+
+    git checkout -b books # 创建分支并切换过去
+
+十几个 commit 过后，功能开发完毕，告诉同事功能开发完毕，有时间帮我 review 一下，分支名是 books，然后把这个分支 push 上去：
+ 
+    # 确保当前在 books 分支，将当前分支 push 到远程仓库的 books 分支。
+    git push origin books
+    
+模拟同事：review 刚刚上传的 books 分支：
+
+    
+
+### 一人多任务
+
+
+
+
+
+
+
+
+
+
+
+
+
