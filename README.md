@@ -523,9 +523,17 @@ git push origin -d books
 
 pull request 不是 git 的内容，而是 git 服务提供商（如 GitHub）提供的一种便捷功能，可以让团队方便的讨论一个 `branch`，并在讨论结束后一件合并这个 `branch` 到 `master`。
 
-如：我们刚刚创建了一个分支并推送到了远程仓库，github 会自动提示是否 pull request:
+如：现在创建一个分支修改购物清单：“购买SSD”，并推送到远程仓库，github 会自动提示是否 pull request:
 
-![](git_img/微信图片_20181005115801.png)
+![](git_img/微信图片_20181005135002.png)
+
+创建一个 pull request：
+
+![](git_img/微信图片_20181005135102.png)
+
+创建之后，其他同事就可以在 github 上看到我们的拉请求。他们可以在这个页面查看我们的所有 commit 并提建议，我们就可以根据同事们的建议提交新的 commit 并 push 到这个分支，这个页面会随着 push 展示最新的 commit。
+
+![](git_img/微信图片_20181005135301.png)
 
 
 
