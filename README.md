@@ -535,10 +535,14 @@ pull request 不是 git 的内容，而是 git 服务提供商（如 GitHub）�
 
 ![](git_img/微信图片_20181005135301.png)
 
+我们在 feature1 分支又决定不买SSD了，于是更新后重新 push，此时该界面也同步更新了一条 commit：
 
+![](git_img/微信图片_20181005140213.png)
+
+就这样，根据同事的意见不断的 push 新 commit 之后，最终一致决定没问题可以合并到 master 了，点击 `Merge pull request` ，GitHub 会自动在中央仓库中将 `feature1` 合并到 `master`。
 
 ### 一人多任务
-
+利用 feature branching 工作流，一个多任务并行开发变得简单多了。当一个新任务下发时，我们仅需要将当前任务的分支简单收尾一下，回到主分支再开辟一个新任务的分支就可以开发新的任务了。
 
 
 
