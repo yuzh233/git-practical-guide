@@ -475,7 +475,7 @@ feature branching 工作流解决了这种问题，该工作流的核心特点�
 
     git checkout -b books # 创建分支并切换过去
 
-十几个 commit 过后，功能开发完毕，告诉同事功能开发完毕，有时间帮我 review 一下，分支名是 books，然后把这个分支 push 上去：
+十几个 commit 过后，功能开发完毕，告诉同事功能开发完毕，有时间帮我 review 一下呗，分支名是 books，然后把这个分支 push 上去：
  
     # 确保当前在 books 分支，将当前分支 push 到远程仓库的 books 分支。
     git push origin books
@@ -519,6 +519,14 @@ git push origin -d books
 ```
  
 ### pull request
+> 在上一主题，同事取到我的新功能审阅代码，都是在自己本地中打开，觉得有问题一般都是通过短信电话，发邮件等。这样的审阅是很不方便的，而 pull request 就是对前面代码审阅过程的简化。
+
+pull request 不是 git 的内容，而是 git 服务提供商（如 GitHub）提供的一种便捷功能，可以让团队方便的讨论一个 `branch`，并在讨论结束后一件合并这个 `branch` 到 `master`。
+
+如：我们刚刚创建了一个分支并推送到了远程仓库，github 会自动提示是否 pull request:
+
+![](git_img/微信图片_20181005115801.png)
+
 
 
 ### 一人多任务
