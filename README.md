@@ -27,7 +27,9 @@
         - [一人多任务](#一人多任务)
     - [关于 add](#关于-add)
     - [看看我改了什么](#看看我改了什么)
-    - [rebase](#rebase)
+    - [不喜欢 merge 的分叉？用 rebase 把](#不喜欢-merge-的分叉用-rebase-把)
+        - [注意事项](#注意事项)
+        - [应用场景](#应用场景)
 
 <!-- /TOC -->
 
@@ -579,7 +581,7 @@ add 添加的是文件改动，而不是文件名。也就是说,对文件修改
 
 - 查看工作目录和上一条 commit 的区别：`git diff HEAD`
 
-## rebase
+## 不喜欢 merge 的分叉？用 rebase 把
 > rebase —— 给当前 commit 序列重新设置基础点（也就是父 commit）。就是说，把指定的 commit 以及所在的 commit 串，以指定的目标 commit 为基础（头），重新作为一次提交。
 
 例如：下面是一个 `merge` 操作: `git merge branch1`
@@ -595,4 +597,59 @@ add 添加的是文件改动，而不是文件名。也就是说,对文件修改
 
 可以看到，通过 rebase，将 commit 5 和 commit 6 这个 commit 串，从原有的父节点 commit 2 移到现在的父节点 commit 4。通过这样，让原本分叉的提交历史重新回到了一条线。这种 [ 重新设置基础点 ] 的操作，就是 `rebase` 的含义。
 
-在 branch1 分支 rebase master之后，branch1 分支和 master 分支实际上属于同一个分支了（master），只不过**原有的 master 的 commit 是落后于现在的 commit 的（branch1 分支的两个 commit 移到了原来master commit 的后面）**
+在 branch1 分支 `rebase` master 之后，branch1 跑到 master 前面变成了同一条线，但是实际上还是两个**彼此独立**的分支，只不过 branch1 现在是以 master 的 HEAD（即：commit 4） 作为 `基础点（commit 串的头）`。**master 的 HEAD 是 `commit 4`，branch1 的 HEAD 是 `commit 8`，并且 branch1 的 commits 领先于 master 的 commits。**
+
+我们希望用 rebase 之后能实现和 merge 一样的合并两条分支的效果，那么怎么做呢？其实还是需要用到 `merge` 操作，**当前分支（master）与目标分支（branch1）没有分叉，并且当前 HEAD 落后于目标分支的 commit，使用 `merge`，将 HEAD 移到目标的 commit**，这就是前面学到过的 [Fast-Forward](#head-落后于目标-commit)。
+
+    git checkout master # 还需先切换回 master
+    git merge branch1
+
+![](git_img/160149e054fe485c.gif)
+
+[ 蒙圈了怎么办，演示一把： ]
+
+    -----------< 新建一个分支 >-----------
+    git branch branch1 
+    -----------< 在 master 创建一个提交 >-----------
+    touch a.txt 
+    git add a.txt
+    git commit -m "add a.txt"
+    -----------< 在 branch1 创建一个提交 >-----------
+    git checkout branch1
+    touch b.txt / touch c.txt
+    git add b.txt c.txt
+    git commit -m "add b.txt c.txt"
+    -----------< 想把 branch1 合并到 master 但是不想有分叉 >-----------
+    # 注意：必须先切换到被合并的分支！
+    git checkout branch1
+    git rebase master
+    
+[ 此时，branch1 和 master 属于同一条线，但是 branch1 领先于 master：]
+
+![](git_img/微信图片_20181005232508.png)
+
+[ branch1 的新提交是 a.txt / b.txt ，master 的新提交是 a.txt，此时合并到 master：`git checkout master / git merge branch1`]
+
+![](git_img/微信图片_20181005233749.png)
+
+[ 可以看出是一个快速前移操作，此时的日志：master 已经移到了最新的 commit]
+
+![](git_img/微信图片_20181005233932.png)
+
+### 注意事项
+
+- merge 操作是在合并分支上进行的；
+
+- rebase 操作是在 **被合并** 分支上进行的，这点很重要。
+
+- rebase 是带着当前 commit 移到别的 commit 上「去」，而 merge 则是把别的 commit 合并过「来」
+
+“ 为什么要在被合并分支 `branch1` 上执行 rebase，在合并分支 `master`上执行 merge，而不是直接在 `master`上执行 rebase 呢？”
+
+—— 简单的理解就是：这两种 rebase 本身就是两种不同的情况，如果在 master 上 rebase：`git checkout master / git rebase branch1` ，**master 就会带着它的 commit 串内容作为新的 commit 跑到 branch1 的 HEAD 前面去啦！** master 跑到了 branch1 这条线上，master 的 commit 的内容还是以前的内容，但是却不是同一个 commit 了，只不过是内容相同的另外一个 commit罢了。而如果远程仓库有之前 master 的 commit，但是在本地仓库中找不到远程库对应的这个 commit，会因为远程库含有本地没有的 commit 导致 push 失败！
+
+### 应用场景
+> 你自己开发分支一直在做，然后某一天，你想把主线的修改合到你的分支上，做一次集成，这种情况就用 rebase 比较好。把你的提交都放在主线修改的头上。
+
+参考：[git rebase 还是 merge的使用场景最通俗的解释](https://www.jianshu.com/p/4079284dd970)
+
