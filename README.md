@@ -14,7 +14,7 @@
     - [关联 GitHub 与本机的 SSH Key](#关联-github-与本机的-ssh-key)
     - [git pull](#git-pull)
     - [HEAD / master / branch 理解](#head--master--branch-理解)
-    - [branch xx / checkout branch xx / checkout -d xx / branch -d xx](#branch-xx--checkout-branch-xx--checkout--d-xx--branch--d-xx)
+    - [branch xx / checkout branch xx / checkout -d xx / branch -d xx / branch -a](#branch-xx--checkout-branch-xx--checkout--d-xx--branch--d-xx--branch--a)
     - [push 的本质](#push-的本质)
     - [git merge <被合并分支>](#git-merge-被合并分支)
         - [冲突（conflict）](#冲突conflict)
@@ -24,6 +24,8 @@
         - [代码审阅（branch / commit / push / review / merge）](#代码审阅branch--commit--push--review--merge)
         - [pull request](#pull-request)
         - [一人多任务](#一人多任务)
+    - [关于 add](#关于-add)
+    - [看看我改了什么](#看看我改了什么)
 
 <!-- /TOC -->
 
@@ -309,7 +311,7 @@ HEAD 除了可以指向 commit，还可以指向一个 **branch**，当它指向
 
 - 在 git clone 时，会自动 checkout 出 master
 
-## branch xx / checkout branch xx / checkout -d xx / branch -d xx 
+## branch xx / checkout branch xx / checkout -d xx / branch -d xx / branch -a
 
 创建一个分支：`git branch feature1`
 
@@ -331,6 +333,8 @@ HEAD 除了可以指向 commit，还可以指向一个 **branch**，当它指向
 - 没有被合并到 master 过的 branch 在删除时会失败。强制删除将 `-d` 改为 `-D`
 
 删除远程的分支：`git push origin -d feature1`
+
+查看所有分支：`git branch -a`
 
 ## push 的本质
 push 是把当前的分支上传到远程仓库，并把这个 branch 的路径上的所有 commits 也一并上传。
@@ -544,5 +548,32 @@ pull request 不是 git 的内容，而是 git 服务提供商（如 GitHub）�
 ### 一人多任务
 利用 feature branching 工作流，一个多任务并行开发变得简单多了。当一个新任务下发时，我们仅需要将当前任务的分支简单收尾一下，回到主分支再开辟一个新任务的分支就可以开发新的任务了。
 
+## 关于 add
+add 指令除了 `git add 文件名` 这种用法外，还可以使用 `add .` 来直接把工作目录下的所有改动全部放进暂存区
 
+add 添加的是文件改动，而不是文件名。也就是说,对文件修改之后通过 add 放入暂存区，**再修改一次该文件，然后执行 commit，第二次的修改并没有提交**，原因是第二次改动了内容没有重新 add。
+
+- add 也支持匹配表达式，如 `add *.java`
+
+- add 文件进暂存区，又不想 add 了，使用：`git reset HEAD filename`
+
+## 看看我改了什么
+- 查看历史记录 `git log`
+
+- 查看详细历史记录 `git log -p`
+
+- 查看概要历史记录 `git log --stat`
+
+- 查看当前（HEAD指向的） commit 的信息 `git show `
+
+- 查看指定 commit 的信息：`git show <commit的引用>`
+
+- 查看指定 commit 中的某个文件的改动：`git show 2edc shopping-list.txt
+`
+
+- 查看工作区和暂存区的区别：`git diff`
+
+- 查看暂存区和上一条提交的区别：`git diff --staged`
+
+- 查看工作目录和上一条 commit 的区别：`git diff HEAD`
 
