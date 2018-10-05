@@ -1,4 +1,5 @@
 # Git 实用指南
+> 本仓库内容基于学习 [扔物线](https://github.com/rengwuxian) 老师的 《git 指南》小册过程中对知识点的大量实践运用与总结，特此记录。
 
 <!-- TOC -->
 
@@ -26,6 +27,7 @@
         - [一人多任务](#一人多任务)
     - [关于 add](#关于-add)
     - [看看我改了什么](#看看我改了什么)
+    - [rebase](#rebase)
 
 <!-- /TOC -->
 
@@ -577,3 +579,20 @@ add 添加的是文件改动，而不是文件名。也就是说,对文件修改
 
 - 查看工作目录和上一条 commit 的区别：`git diff HEAD`
 
+## rebase
+> rebase —— 给当前 commit 序列重新设置基础点（也就是父 commit）。就是说，把指定的 commit 以及所在的 commit 串，以指定的目标 commit 为基础（头），重新作为一次提交。
+
+例如：下面是一个 `merge` 操作: `git merge branch1`
+
+![](git_img/15fdea7b6646a1f3.gif)
+
+如果把 `merge` 换成 `rebase`：
+
+    git checkout branch1 
+    git rebase master
+
+![](git_img/1600abd620a8e28c.gif)
+
+可以看到，通过 rebase，将 commit 5 和 commit 6 这个 commit 串，从原有的父节点 commit 2 移到现在的父节点 commit 4。通过这样，让原本分叉的提交历史重新回到了一条线。这种 [ 重新设置基础点 ] 的操作，就是 `rebase` 的含义。
+
+在 branch1 分支 rebase master之后，branch1 分支和 master 分支实际上属于同一个分支了（master），只不过**原有的 master 的 commit 是落后于现在的 commit 的（branch1 分支的两个 commit 移到了原来master commit 的后面）**
