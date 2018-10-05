@@ -21,7 +21,8 @@
         - [HEAD 领先于目标 commit](#head-领先于目标-commit)
         - [HEAD 落后于目标 commit](#head-落后于目标-commit)
     - [Feature Branching 工作流](#feature-branching-工作流)
-        - [代码分享](#代码分享)
+        - [代码审阅（branch / commit / push / review / merge）](#代码审阅branch--commit--push--review--merge)
+        - [pull request](#pull-request)
         - [一人多任务](#一人多任务)
 
 <!-- /TOC -->
@@ -329,6 +330,8 @@ HEAD 除了可以指向 commit，还可以指向一个 **branch**，当它指向
 
 - 没有被合并到 master 过的 branch 在删除时会失败。强制删除将 `-d` 改为 `-D`
 
+删除远程的分支：`git push origin -d feature1`
+
 ## push 的本质
 push 是把当前的分支上传到远程仓库，并把这个 branch 的路径上的所有 commits 也一并上传。
 
@@ -465,9 +468,9 @@ feature branching 工作流解决了这种问题，该工作流的核心特点�
 
 - branch 写完之后，合并到 master，再删除这个 branch。
 
-这种工作流为团队协作间的 **代码分享 / 一人多任务** 提供解决方案。
+这种工作流为团队协作间的 **代码审阅 / 一人多任务** 提供解决方案。
 
-### 代码分享
+### 代码审阅（branch / commit / push / review / merge）
 假如要开发一个新的功能，我们创建一个分支 books ，开始开发：
 
     git checkout -b books # 创建分支并切换过去
@@ -477,20 +480,48 @@ feature branching 工作流解决了这种问题，该工作流的核心特点�
     # 确保当前在 books 分支，将当前分支 push 到远程仓库的 books 分支。
     git push origin books
     
-模拟同事：review 刚刚上传的 books 分支：
+[ 模拟同事：review 刚刚上传的 books 分支：]
 
-    
+    # 克隆同事的仓库到桌面（如果同事有这个仓库就是 git pull ）
+    git clone https://github.com/yuzh233/git-practical-guide.git
+    cd git-practical-guide
+    git checkout books # 切换到同事刚刚开发新功能的分支：books
+    开始 review ...
+
+[ review 完毕，同事：我觉得很 OK 啊~ 可以合并了！]
+
+于是我一顿操作：
+
+    git checkout master
+    git pull # 保持更新，是个好习惯
+    git merge books
+    -- 此时 books 分支的内容合并到了 master 工作目录 --
+
+紧接着，把合并后的 master push 上去，并删除本地和远程的 books 分支：
+
+    git push
+    git branch -d books # 删除本地 books 分支
+    git push origin -d books # 删除远程 books 分支
+
+一切都是这么的完美，然而此时一个同事发现不对，说：“嘿！你的代码缩进怎么是 tab ，快改成空格，不然砍死你哦~”，我一看情况不对，立马重复上面的操作：`新建分支、改代码、推送上去、同事审阅、合并、再推送、删除分支`，ok，空格党觉得很ok，乎~ perfect。[ 然而，发现事情没有这么简单... ]
+
+```git
+git branch books
+git checkout books
+--- tab 改为 空格 git add / git commit ---
+git push origin books
+---  review... ok ---
+git checkout master
+git merge books # 这里会出现 Fast-forward，原因是当前commit（HEAD）落后于目标commit（books 的 commit 比 master 的 HEAD 领先）
+git push
+git branch -d books
+git push origin -d books
+```
+ 
+### pull request
+
 
 ### 一人多任务
-
-
-
-
-
-
-
-
-
 
 
 
