@@ -31,6 +31,7 @@
         - [注意事项](#注意事项)
         - [应用场景](#应用场景)
     - [刚刚提交的代码，发现写错了怎么办？](#刚刚提交的代码发现写错了怎么办)
+    - [写错的不是最新的提交，而是倒数第二个？](#写错的不是最新的提交而是倒数第二个)
 
 <!-- /TOC -->
 
@@ -655,5 +656,29 @@ add 添加的是文件改动，而不是文件名。也就是说,对文件修改
 参考：[git rebase 还是 merge的使用场景最通俗的解释](https://www.jianshu.com/p/4079284dd970)
 
 ## 刚刚提交的代码，发现写错了怎么办？
-用 `commit -amend` 修复当前提交的错误。在 commit 一条提交之后发现写错了，可以使用 `commit -amend` 指令来修正本次提交的错误。git 不会在当前 commit 上增加 commit ，而是把当前 commit 里的内容和暂存区的内容合并起来形成一个新的 commit，**用新的 commit 把当前的 commit 替换掉**。
+用 `commit --amend` 修复当前提交的错误。在 commit 一条提交之后发现写错了，我要买：“机械键盘”，可以使用 `commit --amend` 指令来修正本次提交的错误。git 不会在当前 commit 上增加 commit ，而是把当前 commit 里的内容和暂存区的内容合并起来形成一个新的 commit，**用新的 commit 把当前的 commit 替换掉**。
 
+[ 我们在购物清单中添加一个：“薄膜键盘”，提交之后发现写错了... 于是将内容重新修改，并重新 add 到暂存区，使用 commit --amend 指令覆盖当前提交：]
+
+![](git_img/微信图片_20181006105607.png)
+
+修正之后可以发现只有一条 commit 记录。
+
+## 写错的不是最新的提交，而是倒数第二个？
+> 交互式 rebase：`git rebase -i <指定 commit 链的头>` <br>
+所谓交互式 rebase，就是在 rebase 的操作执行之前，你可以指定要 rebase 的 commit 链中的每一个 commit 是否需要进一步修改。
+
+    -------< 第一次提交 >-------
+    我们在文件 rebase-i.txt 中添加一行
+    aaaaa
+    后执行提交：git add rebase-i.txt / git commit -m "aaaaa"
+    -------< 第二次提交 >-------
+    在文件 rebase-i.txt 中又添加一行
+    bbbbb
+    后执行提交：git add rebase-i.txt / git commit -m "bbbbb"
+    
+查看日志：
+
+![](git_img/微信图片_20181006122541.png)
+
+但是发现 "aaaaa" 这个提交的内容写错了，想要修改这次提交。由于不是最新的提交，不能使用 commit --amend 来修正。
