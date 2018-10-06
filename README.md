@@ -666,7 +666,7 @@ add 添加的是文件改动，而不是文件名。也就是说,对文件修改
 
 ## 写错的不是最新的提交，而是倒数第二个？
 > 交互式 rebase：`git rebase -i <指定 commit 链的头>` <br>
-所谓交互式 rebase，就是在 rebase 的操作执行之前，你可以指定要 rebase 的 commit 链中的每一个 commit 是否需要进一步修改。
+所谓交互式 rebase，就是在 rebase 的操作执行之前，指定要 rebase 的 commit 链中的每一个 commit 是否需要进一步修改。
 
     -------< 第一次提交 >-------
     我们在文件 rebase-i.txt 中添加一行
@@ -682,3 +682,27 @@ add 添加的是文件改动，而不是文件名。也就是说,对文件修改
 ![](git_img/微信图片_20181006122541.png)
 
 但是发现 "aaaaa" 这个提交的内容写错了，想要修改这次提交。由于不是最新的提交，不能使用 commit --amend 来修正。
+
+> 可以使用 rabse，不过此时的 rebase 是在同一条基线上，也叫 [原地 rebase]，通过原地变基，指定一个 commit ，将其所在的 commits 串从父基础点断开。然后对该 commits 串中的每一个 commit 修改后重新挂在原来的父基础点。
+
+使用 `git rebase -i HEAD^^` or `git rebase -i HEAD~2` 来指定从哪个 commit 开始变基。（rebase 之前需要将工作空间新的修改放入暂存区，所以现在有了三条提交。）
+
+![](git_img/微信图片_20181006124918.png)
+
+我们要修正指定的 commit，将需要被修正的 commit 对应的操作由 `pick` 改为 `edit`（应用当前的提交，但是停下来修正）：
+
+![](git_img/微信图片_20181006125849.png)
+
+![](git_img/微信截图_20181006130312.png)
+
+根据提示信息：rebase 已经停到了 "aaaaa" 这个提交，现在可以修正这个提交：
+
+```shell
+修改 aaaaa 为 aaaaa_amend
+git commit --amend # 引用这个修复
+```
+
+修复了第一个之后，执行：`git rebase --continue` 继续执行第二个：第二个也是修复，对文件修改 amend 之后继续 continue ，第三个 commit 是默认操作是 pick（应用当前的提交），不执行任何操作，至此rebase完毕
+
+![](git_img/微信图片_20181006131703.png)
+
