@@ -1,6 +1,4 @@
 # Git 实用指南
-> 本仓库内容基于学习 [扔物线](https://github.com/rengwuxian) 老师的 《git 指南》小册过程中对知识点的大量实践运用与总结，特此记录。
-
 <!-- TOC -->
 
 - [Git 实用指南](#git-实用指南)
@@ -32,8 +30,10 @@
         - [应用场景](#应用场景)
     - [修正 commit](#修正-commit)
     - [修正指定 commit](#修正指定-commit)
-    - [撤销 commit](#撤销-commit)
-    - [撤销指定 commit](#撤销指定-commit)
+    - [撤销 commit —— reset](#撤销-commit--reset)
+    - [撤销指定 commit —— rebase -i](#撤销指定-commit--rebase--i)
+    - [撤销已 push 的 commit —— revert](#撤销已-push-的-commit--revert)
+    - [reset (vs) revert](#reset-vs-revert)
 
 <!-- /TOC -->
 
@@ -708,7 +708,7 @@ git commit --amend # 应用这个修复
 
 ![](git_img/微信图片_20181006131703.png)
 
-## 撤销 commit
+## 撤销 commit —— reset
 git add 后撤销：
 
 - 撤销所有add文件 `git reset HEAD .`
@@ -722,8 +722,33 @@ git commit 后撤销：
 - 回退到上次 commit 版本，不保留修改代码：`git reset --hard head^`
 
     HEAD ：当前版本
+
     HEAD^ ：上一个版本
+
     --hard 参数会抛弃当前工作区的修改
+    
     --soft 参数的话会回退到之前的版本，但是保留当前工作区的修改，可以重新提交
 
-## 撤销指定 commit
+## 撤销指定 commit —— rebase -i
+
+现有三条提交，要撤销第二条提交：
+
+![](git_img/微信图片_20181006153002.png)
+
+`git rebase -i HEAD~3` 操作当前 commit 所在 commits 链中三条 commit：
+
+![](git_img/微信图片_20181006153145.png)
+
+
+撤销某个 commit ，将这一行删除即可。此时第二条 commit 被删掉了：
+
+![](git_img/微信图片_20181006153842.png)
+
+## 撤销已 push 的 commit —— revert
+`git revert` 撤销某次操作，此次操作之前和之后的 commit 和 history 都会保留，并且把这次撤销作为一次最新的提交。
+
+
+
+## reset (vs) revert
+
+
