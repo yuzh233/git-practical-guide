@@ -33,7 +33,9 @@
     - [撤销 commit —— reset](#撤销-commit--reset)
     - [撤销指定 commit —— rebase -i](#撤销指定-commit--rebase--i)
     - [撤销已 push 的 commit —— revert](#撤销已-push-的-commit--revert)
-    - [](#)
+    - [Checkout 的本质](#checkout-的本质)
+    - [stash 打包](#stash-打包)
+    - [恢复误删的 branch](#恢复误删的-branch)
 
 <!-- /TOC -->
 
@@ -721,13 +723,21 @@ git commit 后撤销：
 
 - 回退到上次 commit 版本，不保留修改代码：`git reset --hard head^`
 
-    HEAD ：当前版本
+`HEAD`：回退到当前版本（啥也没干）
 
-    HEAD^ ：上一个版本
+`HEAD^` ：回退到上一个版本
 
-    --hard 参数会抛弃当前工作区的修改
-    
-    --soft 参数的话会回退到之前的版本，但是保留当前工作区的修改，可以重新提交
+> reset 本质上不是撤销提交，而是移动 HEAD ，并且「捎带」上 HEAD 所指向的 branch（如果有的话），用来重置 HEAD 以及它所指向的 branch 的位置。
+
+`reset --hard HEAD^` 之所以起到了撤销前一个 commit 的效果，是因为它把 HEAD 和它所指向的 branch 一起移动到了当前 commit 的父 commit 上，从而起到了「撤销」的效果：
+
+![](git_img/15fe19c8a3235853.gif)
+
+注意：
+
+`--hard`： **添加这个参数会抛弃当前工作区的修改**
+
+`--soft`： **添加这个参数会回退到之前的版本，但是保留当前工作区的修改，可以重新提交**
 
 ## 撤销指定 commit —— rebase -i
 
@@ -759,4 +769,8 @@ git commit 后撤销：
 
 > 把新的 commit 再 push 上去，这个 commit 的内容就被撤销了。它和前面所介绍的撤销方式相比，最主要的区别是，这次改动只是被「反转」了，并没有在历史中消失掉，你的历史中会存在两条 commit ：一个原始 commit ，一个对它的反转 commit。
 
-## 
+## Checkout 的本质
+
+## stash 打包
+
+## 恢复误删的 branch
