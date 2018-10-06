@@ -33,7 +33,7 @@
     - [撤销 commit —— reset](#撤销-commit--reset)
     - [撤销指定 commit —— rebase -i](#撤销指定-commit--rebase--i)
     - [撤销已 push 的 commit —— revert](#撤销已-push-的-commit--revert)
-    - [reset (vs) revert](#reset-vs-revert)
+    - [](#)
 
 <!-- /TOC -->
 
@@ -747,8 +747,16 @@ git commit 后撤销：
 ## 撤销已 push 的 commit —— revert
 `git revert` 撤销某次操作，此次操作之前和之后的 commit 和 history 都会保留，并且把这次撤销作为一次最新的提交。
 
+比如我们我们对文件`rebase-i.txt`添加两次修改并提交两次后 push 到远程库：
 
+![](git_img/微信图片_20181006162144.png)
 
-## reset (vs) revert
+我们要撤销前一次提交:"bbb"，也就是删除文件中的“bbb”这一行：`git revert HEAD`
 
+![](git_img/微信图片_20181006162338.png)
 
+可以看到执行完之后增加了一条新的 commit，它的内容和最新的 commit 是相反的，从而和最新的 commit 相互抵消，达到撤销的效果。
+
+> 把新的 commit 再 push 上去，这个 commit 的内容就被撤销了。它和前面所介绍的撤销方式相比，最主要的区别是，这次改动只是被「反转」了，并没有在历史中消失掉，你的历史中会存在两条 commit ：一个原始 commit ，一个对它的反转 commit。
+
+## 
