@@ -28,7 +28,7 @@
     - [撤销指定 commit —— rebase -i](#撤销指定-commit--rebase--i)
     - [撤销已 push 的 commit —— revert](#撤销已-push-的-commit--revert)
     - [checkout —— 不止可以签出分支](#checkout--不止可以签出分支)
-    - [stash 打包](#stash-打包)
+    - [stash 临时存放工作目录的改动](#stash-临时存放工作目录的改动)
     - [恢复误删的 branch](#恢复误删的-branch)
 
 <!-- /TOC -->
@@ -786,8 +786,32 @@ git commit 后撤销：
 
 ![](git_img/image_6.png)
 
-可以看到，HEAD 已经和刚刚它指向的 branch -> master 脱离了
+可以看到，HEAD 已经和刚刚它指向的 branch -> master 脱离了，此时如果继续提交更改，HEAD 就会跟着新的 commit 跑，而 master 依旧停到原地。当我们切换 master 之后，HEAD会因为没有所属分支而提示：“你有n个提交没有连接到分支,可以通过：`git branch <new-branch-name> commitID` 将新提交放到新创建的分支上去。然后可以将该分支合并到 master。”
 
-## stash 打包
+## stash 临时存放工作目录的改动
+- 保存工作目录的修改（不包含未 add 过的文件）并清空工作目录：`git stash`
+
+- 恢复保存过的修改：`git stash pop`
+
+包含未 add 过的文件使用：`git stash -u`
+
+**切换分支之前提交当前分支的修改，免去了不必要的麻烦，也没必要使用 stash 了。**
 
 ## 恢复误删的 branch
+> `reflog` 是 "reference log" 的缩写，使用它可以查看 Git 仓库中的引用的移动记录。如果不指定引用，它会显示 HEAD 的移动记录。
+
+恢复指定 branch ，只需要查看 branch 最后一次移动的记录，那么其之前的一个 commit 就是删除之前的数据，使用 checkout 签出这个 commit 的内容到新的分支。实际上不会恢复分支，而是恢复分支里的内容并放到新的分支。使用这个方法，不仅可以恢复分支，还可以执行其他操作，比如恢复 reset 的数据。
+
+    假如误删了 branch1，那么可以查看一下 HEAD 的移动历史：
+    git reflog
+
+![](git_img/15fe3de05468c613.jpg)
+
+    HEAD 的最后一次移动行为是「从 branch1 移动到 master」。而在这之后，branch1 就被删除了。所以它之前的那个 commit 就是 branch1 被删除之前的位置了，也就是第二行的 c08de9a。
+
+现在就可以切换回 c08de9a，然后重新创建 branch1:
+
+    git checkout c08de9a
+    git checkout -b branch1
+
+这样分支里的内容就已经恢复到新建的同名分支里面了。
