@@ -761,10 +761,32 @@ git commit 后撤销：
 
 可以看到执行完之后增加了一条新的 commit，它的内容和最新的 commit 是相反的，从而和最新的 commit 相互抵消，达到撤销的效果。
 
-> 把新的 commit 再 push 上去，这个 commit 的内容就被撤销了。它和前面所介绍的撤销方式相比，最主要的区别是，这次改动只是被「反转」了，并没有在历史中消失掉，你的历史中会存在两条 commit ：一个原始 commit ，一个对它的反转 commit。
+> 把新的 commit 再 push 上去，这个 commit 的内容就被撤销了。它和前面所介绍的撤销方式 `reset` 相比，最主要的区别是，这次改动只是被「反转」了，并没有在历史中消失掉，你的历史中会存在两条 commit ：一个原始 commit ，一个对它的反转 commit。
 
 ## checkout —— 不止可以签出分支
+前面学习过，使用：`git checkout <branch-name>` 可以切换到指定分支，即：把 HEAD 指向指定的 `branch`，然后签出这个 `branch` 所对应的 commit 的工作目录。 
 
+实际上 checkout 的本质是签出指定的 commit，不止可以切换 branch，也可以直接指定 commit 作为参数，来把 HEAD 移动到指定的 commit。
+
+> 对于签出（checkout）的概念，简单的理解就是切换分支并在本地仓库中取出指定分支的内容到工作目录。
+
+[ 演示：]
+
+    创建一个文件abc.txt并作为一个提交
+
+![](git_img/image_4.png)
+
+    使用 reset 撤回提交（不保留修改代码）： git reset --hard HEAD^
+
+可以看到刚刚的提交被撤销了，HEAD 带着 master 一起指向了上一条 commit：
+
+![](git_img/image_5.png)
+
+    如果用 checkout 来撤销提交：git checkout HEAD^
+
+![](git_img/image_6.png)
+
+可以看到，HEAD 已经和刚刚它指向的 branch -> master 脱离了
 
 ## stash 打包
 
